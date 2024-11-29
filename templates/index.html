@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The effective electropower</title>
+    <style>
+		/* General and specific styling for the page */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+header {
+    background-color: #000;
+    color: white;
+    padding: 20px;
+    width: 100%;
+    text-align: center;
+}
+
+main {
+    padding: 20px;
+    width: 90%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.sensor {
+    background-color: #000;
+    padding: 15px;
+    border: 2px solid #253f44;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.sensor h2 {
+    margin-bottom: 10px;
+    font-size: 1.5em;
+	color: #fff; /* Dark green color */
+}
+
+.sensor p {
+    font-size: 1.2em;
+    font-weight: bold;
+	color: #fff; /* Dark green color */
+}
+
+canvas {
+    margin-top: 15px;
+    max-width: 100%;
+}
+
+@media (max-width: 600px) {
+    .sensor {
+        padding: 10px;
+    }
+
+    .sensor h2 {
+        font-size: 1.2em;
+    }
+
+    .sensor p {
+        font-size: 1em;
+    }
+}
+
+
+.chart-container {
+  width: 80%;
+  max-width: 600px;
+}
+
+
+	</style>
+</head>
+<body>
+    <header>
+        <h1 style="font-size: 30px">The effective electropower</h1>
+    </header>
+    <main>
+        <section class="sensor">
+            <h2>Voltage</h2>
+            <p id="ambientTemp-value">value V ( All values are normal )</p>
+            <canvas id="canvas" width="400" height="200"></canvas>
+        </section>
+        <section class="sensor">
+            <h2>Voltage</h2>
+            <p id="ambientTemp-value">value V ( All values are normal )</p>
+            <canvas id="ambientTemp-chart" width="400" height="200"></canvas>
+        </section>
+        <section class="sensor">
+            <h2>Current</h2>
+            <p id="objectTemp-value">valuee A ( All values are normal )</p>
+            <canvas id="objectTemp-chart" width="400" height="200"></canvas>
+        </section>
+        <section class="sensor">
+            <h2>Temperature</h2>
+            <p id="redValue-value">valueee A ( All values are normal )</p>
+            <canvas id="redValue-chart" width="400" height="200"></canvas>
+        </section>
+    </main>
+
+    <!-- Include Chart.js library -->
+    <script src="https://unpkg.com/chart.js@3"></script>
+    <script src="https://unpkg.com/@sgratzl/chartjs-chart-boxplot@3"></script>
+    <script id="rendered-js">
+        function randomValues(count, min, max) {
+          const delta = max - min;
+          return Array.from({ length: count }).map(() => Math.random() * delta + min);
+          }
+        const boxplotData = {
+          // define label tree
+          labels: ['1', '2', '3', '4', '5', '6'],
+          datasets: [{
+            label: 'Dataset 1',
+            backgroundColor: 'rgba(255,255,255,1)',
+            borderColor: 'grey',
+            borderWidth: 1,
+            outlierColor: '#999999',
+            padding: 10,
+            itemRadius: 0,
+            data: [
+            randomValues(100, 0, 100),
+            randomValues(100, 0, 20),
+            randomValues(100, 20, 70),
+            randomValues(100, 60, 100),
+            randomValues(40, 50, 100),
+            randomValues(100, 60, 120)] },
+        
+          {
+            label: 'Dataset 2',
+            backgroundColor: 'rgba(255,255,255,0.5)',
+            borderColor: 'white',
+            borderWidth: 1,
+            outlierColor: '#999999',
+            padding: 10,
+            itemRadius: 0,
+            data: [
+            randomValues(100, 60, 100),
+            randomValues(100, 0, 100),
+            randomValues(100, 0, 20),
+            randomValues(100, 20, 70),
+            randomValues(40, 60, 120),
+            randomValues(100, 20, 100)] }] };
+        
+        
+        
+        window.onload = () => {
+          const ctx = document.getElementById("canvas").getContext("2d");
+          window.myBar = new Chart(ctx, {
+            type: 'boxplot',
+            data: boxplotData,
+            options: {
+              responsive: true,
+              legend: {
+                position: 'top' },
+        
+              title: {
+                display: true,
+                text: 'Chart.js Box Plot Chart' } } });
+        
+        
+        
+        
+        };
+        //# sourceURL=pen.js
+            </script>
+    <script>
+    
+		// Data for the charts
+const ambientTempData = [1, 2, 3, 4];
+const objectTempData = [1, 2, 3, 4];
+const redValueData = [1, 2, 3, 4];
+const irValueData = [1, 2, 3, 4];
+const GSRData = [1, 2, 3, 4];
+
+// Create MQ-135 chart
+const ambientTempCtx = document.getElementById('ambientTemp-chart').getContext('2d');
+new Chart(ambientTempCtx, {
+    type: 'scatter',
+    data: {
+        labels: [1, 2, 3, 4],
+        datasets: [{
+            label: 'Volt Readings',
+            data: ambientTempData,
+            borderColor: '#fff',
+            backgroundColor: 'rgba(255, 255, 255, 0.2)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+
+
+
+
+const objectTempCtx = document.getElementById('objectTemp-chart').getContext('2d');
+new Chart(objectTempCtx, {
+    type: 'scatter',
+    data: {
+        labels: [1, 2, 3, 4],
+        datasets: [{
+            label: 'Volt Readings',
+            data: objectTempData,
+            borderColor: '#fff',
+            backgroundColor: 'rgba(255, 255, 255, 0.2)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+
+
+
+
+
+const redValueCtx = document.getElementById('redValue-chart').getContext('2d');
+new Chart(redValueCtx, {
+    type: 'bar',
+    data: {
+        labels: [1, 2, 3, 4],
+        datasets: [{
+            label: 'Current Readings',
+            data: redValueData,
+            borderColor: '#fff',
+            backgroundColor: 'rgba(255, 255, 255, 0.2)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+
+
+
+
+
+	</script>
+</body>
+</html>
